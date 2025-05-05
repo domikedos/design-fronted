@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useLocation } from 'react-router-dom';
+import { ConnectWalletButton } from '../TonConnectButton/TonConenctButton';
 
 const Navigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -182,7 +183,7 @@ const Navigation = () => {
                   />
                   Connect Telegram
                 </Button>
-                <div id="ton-connect-button"></div>
+                <ConnectWalletButton />
               </Box>
             </>
           )}

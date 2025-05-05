@@ -141,7 +141,7 @@ export default function Submission() {
                 fontSize: '14px',
                 lineHeight: '1.5',
                 height: '100%',
-                backgroundColor: 'rgba(255, 255, 255, 0.035)'
+                backgroundColor: 'rgba(255, 255, 255, 0)'
               }}
             >
               {submission.code}
@@ -161,7 +161,7 @@ export default function Submission() {
           <Paper
             sx={{
               p: 3,
-              backgroundColor: 'rgba(255, 255, 255, 0.09)',
+              backgroundColor: 'rgba(255, 255, 255, 0.035)',
               borderRadius: '8px',
               display: 'flex',
               flexDirection: 'column',
@@ -191,7 +191,7 @@ export default function Submission() {
           <Paper
             sx={{
               p: 3,
-              backgroundColor: 'rgba(255, 255, 255, 0.09)',
+              backgroundColor: 'rgba(255, 255, 255, 0.035)',
               borderRadius: '8px',
               display: 'flex',
               flexDirection: 'column',

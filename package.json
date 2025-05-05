@@ -30,5 +30,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.87.0"
   }
 }

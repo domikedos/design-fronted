@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Paper, Select, MenuItem, Button } from '@mui/material';
+import { Box, Container, Typography, Paper, Select, MenuItem, Button, Tabs, Tab, CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import Editor, { loader } from '@monaco-editor/react';
@@ -114,6 +114,16 @@ describe("SimpleStorage", () => {
 });`
 };
 
+// Add mock test results
+const MOCK_TEST_RESULTS = {
+  passed: true,
+  results: [
+    { name: "should store and retrieve value", passed: true, message: "Test passed successfully" },
+    { name: "should clear stored value", passed: true, message: "Test passed successfully" },
+    { name: "should handle invalid input", passed: false, message: "Expected null but got 42" }
+  ]
+};
+
 const languages = [
   { value: 'func', label: 'FunC' },
   { value: 'tact', label: 'Tact' },
@@ -195,11 +205,15 @@ export default function Problem() {
   const [editorState, setEditorState] = useState<EditorState>(getInitialCode);
   const [testCode, setTestCode] = useState(MOCK_PROBLEM.testCode);
   const [testEditorHeight, setTestEditorHeight] = useState(300);
+  const [activeTab, setActiveTab] = useState(0);
   const isDragging = useRef(false);
   const startY = useRef(0);
   const startHeight = useRef(0);
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
+  const [testResults, setTestResults] = useState<typeof MOCK_TEST_RESULTS | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor;
@@ -289,42 +303,164 @@ export default function Problem() {
     };
   }, []);
 
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
+  const handleTest = () => {
+    setIsTesting(true);
+    // Simulate test execution
+    setTimeout(() => {
+      setTestResults(MOCK_TEST_RESULTS);
+      setActiveTab(2); // Switch to test results tab
+      setIsTesting(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1000);
+  };
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    // Simulate submission process
+    setTimeout(() => {
+      setIsSubmitting(false);
+      // Here you would typically handle the submission response
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1000);
+  };
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
-        {/* Problem Description */}
+        {/* Problem Description and Submissions */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Paper
             sx={{
-              p: 3,
               backgroundColor: 'rgba(255, 255, 255, 0.035)',
               borderRadius: '8px',
               boxShadow: 'none',
-              border: 'none'
+              border: 'none',
+              overflow: 'hidden'
             }}
           >
-            <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
-              {MOCK_PROBLEM.id}. {MOCK_PROBLEM.name}
-            </Typography>
-            <Typography
+            <Tabs 
+              value={activeTab} 
+              onChange={handleTabChange}
               sx={{
-                color: MOCK_PROBLEM.difficulty === 'Easy' ? '#4CAF50' : 
-                       MOCK_PROBLEM.difficulty === 'Medium' ? '#FFC107' : '#F44336',
-                fontWeight: 500,
-                mb: 3
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                '& .MuiTab-root': {
+                  color: 'text.secondary',
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  minWidth: 120,
+                  '&.Mui-selected': {
+                    color: 'text.primary'
+                  }
+                },
+                '& .MuiTabs-indicator': {
+                  backgroundColor: '#0098EA'
+                }
               }}
             >
-              {MOCK_PROBLEM.difficulty}
-            </Typography>
-            <Typography
-              variant="body1"
-              component="div"
-              sx={{
-                color: 'text.primary'
-              }}
-            >
-              {formatDescription(MOCK_PROBLEM.description)}
-            </Typography>
+              <Tab label="Description" />
+              <Tab label="Submissions" />
+              <Tab label="Test Results" />
+            </Tabs>
+            <Box sx={{ p: 3 }}>
+              {activeTab === 0 ? (
+                <>
+                  <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
+                    {MOCK_PROBLEM.id}. {MOCK_PROBLEM.name}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: MOCK_PROBLEM.difficulty === 'Easy' ? '#4CAF50' : 
+                             MOCK_PROBLEM.difficulty === 'Medium' ? '#FFC107' : '#F44336',
+                      fontWeight: 500,
+                      mb: 3
+                    }}
+                  >
+                    {MOCK_PROBLEM.difficulty}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    component="div"
+                    sx={{
+                      color: 'text.primary'
+                    }}
+                  >
+                    {formatDescription(MOCK_PROBLEM.description)}
+                  </Typography>
+                </>
+              ) : activeTab === 1 ? (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Your Submissions
+                  </Typography>
+                  <Typography color="text.secondary">
+                    No submissions yet
+                  </Typography>
+                </Box>
+              ) : (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Test Results
+                  </Typography>
+                  {testResults ? (
+                    <>
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 1,
+                        mb: 2,
+                        color: testResults.passed ? '#4CAF50' : '#F44336'
+                      }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                          {testResults.passed ? 'All tests passed' : 'Tests failed'}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        {testResults.results.map((result, index) => (
+                          <Paper
+                            key={index}
+                            sx={{
+                              p: 2,
+                              backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                              border: '1px solid',
+                              borderColor: result.passed ? 'rgba(76, 175, 80, 0.2)' : 'rgba(244, 67, 54, 0.2)',
+                              borderRadius: '4px'
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                              <Typography sx={{ fontWeight: 500 }}>
+                                {result.name}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  color: result.passed ? '#4CAF50' : '#F44336',
+                                  fontWeight: 600
+                                }}
+                              >
+                                {result.passed ? 'PASSED' : 'FAILED'}
+                              </Typography>
+                            </Box>
+                            {!result.passed && (
+                              <Typography color="text.secondary" sx={{ fontSize: '0.875rem' }}>
+                                {result.message}
+                              </Typography>
+                            )}
+                          </Paper>
+                        ))}
+                      </Box>
+                    </>
+                  ) : (
+                    <Typography color="text.secondary">
+                      No test results yet. Run the tests to see results.
+                    </Typography>
+                  )}
+                </Box>
+              )}
+            </Box>
           </Paper>
         </Box>
 
@@ -442,19 +578,44 @@ export default function Problem() {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button
               variant="outlined"
+              onClick={handleTest}
+              disabled={isTesting}
               sx={{
                 color: 'text.primary',
                 borderColor: 'rgba(255, 255, 255, 0.1)',
+                minWidth: '120px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 '&:hover': {
                   borderColor: 'rgba(255, 255, 255, 0.2)',
                   backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                },
+                '&.Mui-disabled': {
+                  borderColor: 'rgba(255, 255, 255, 0.05)',
+                  color: 'rgba(255, 255, 255, 0.3)'
                 }
               }}
             >
-              Test
+              {isTesting ? (
+                <CircularProgress
+                  size={20}
+                  sx={{
+                    color: 'text.primary',
+                    '& .MuiCircularProgress-circle': {
+                      strokeLinecap: 'round',
+                    }
+                  }}
+                />
+              ) : (
+                'Test'
+              )}
             </Button>
             <Button
               variant="contained"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
               sx={{
                 borderRadius: '6px !important',
                 background: '#0088CC !important',
@@ -464,13 +625,34 @@ export default function Problem() {
                 lineHeight: '18px',
                 padding: '0px 16px !important',
                 transition: 'all 0.2s ease-in-out !important',
+                minWidth: '120px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 '&:hover': {
                   borderRadius: '8px !important',
                   background: '#006699 !important',
+                },
+                '&.Mui-disabled': {
+                  background: 'rgba(0, 136, 204, 0.5) !important',
+                  color: 'rgba(255, 255, 255, 0.7) !important'
                 }
               }}
             >
-              Submit
+              {isSubmitting ? (
+                <CircularProgress
+                  size={20}
+                  sx={{
+                    color: '#FFFFFF',
+                    '& .MuiCircularProgress-circle': {
+                      strokeLinecap: 'round',
+                    }
+                  }}
+                />
+              ) : (
+                'Submit'
+              )}
             </Button>
           </Box>
         </Box>

@@ -1,4 +1,4 @@
-import { Drawer, List, ListItem, ListItemText, Box } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ConnectWalletButton } from '../wallet/TonConnectButton';
 import { TelegramConnectButton } from '../common/TelegramConnectButton';

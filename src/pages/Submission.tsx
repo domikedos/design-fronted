@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Paper, Chip } from '@mui/material';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -92,7 +92,6 @@ const getStatusColor = (status: string) => {
 };
 
 export default function Submission() {
-  const { id } = useParams();
   // In real app, fetch submission data using id
   const submission = MOCK_SUBMISSION;
 

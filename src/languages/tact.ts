@@ -1,5 +1,3 @@
-import * as monaco from 'monaco-editor';
-
 export function registerTactLanguage(monaco: typeof import('monaco-editor')) {
   // Register the language
   monaco.languages.register({ id: 'tact' });

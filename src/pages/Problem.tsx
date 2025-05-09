@@ -1,5 +1,4 @@
 import { Box, Container, Typography, Paper, Select, MenuItem, Button, Tabs, Tab, CircularProgress } from '@mui/material';
-import { useParams } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import Editor, { loader } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
@@ -200,7 +199,6 @@ const formatDescription = (text: string) => {
 };
 
 export default function Problem() {
-  const { id } = useParams();
   const [selectedLanguage, setSelectedLanguage] = useState('func');
   const [editorState, setEditorState] = useState<EditorState>(getInitialCode);
   const [testCode, setTestCode] = useState(MOCK_PROBLEM.testCode);
@@ -303,7 +301,7 @@ export default function Problem() {
     };
   }, []);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
 

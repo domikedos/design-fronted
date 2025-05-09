@@ -1,5 +1,3 @@
-import * as monaco from 'monaco-editor';
-
 export function registerJestLanguage(monaco: typeof import('monaco-editor')) {
   // Add Jest-specific token rules to TypeScript
   monaco.languages.setMonarchTokensProvider('typescript', {

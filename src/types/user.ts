@@ -5,6 +5,7 @@ export interface User {
   lastName: string;
   address: string;
   solved: number;
+  createdAt: number;
   avatar: string;
 }
 

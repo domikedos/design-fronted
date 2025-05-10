@@ -320,8 +320,9 @@ export default function Problem() {
     setIsSubmitting(true);
     // Simulate submission process
     setTimeout(() => {
+      setTestResults(MOCK_TEST_RESULTS);
+      setActiveTab(2); // Switch to test results tab
       setIsSubmitting(false);
-      // Here you would typically handle the submission response
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1000);
   };

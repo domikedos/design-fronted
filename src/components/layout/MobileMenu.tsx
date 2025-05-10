@@ -41,6 +41,7 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
           backgroundColor: '#141824',
           width: '100%',
           maxWidth: '220px',
+          borderRadius: '0px 0px 0px 10px'
         }
       }}
     >

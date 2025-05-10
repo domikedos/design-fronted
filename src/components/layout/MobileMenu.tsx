@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ConnectWalletButton } from '../wallet/TonConnectButton';
 import { TelegramConnectButton } from '../common/TelegramConnectButton';
 import { useTelegramAuth } from '../../hooks/useTelegramAuth';
+import { useTonWallet } from '@tonconnect/ui-react';
 
 interface MobileMenuProps {
   open: boolean;
@@ -21,6 +22,13 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
   const handleTelegramClick = () => {
     openTelegramAuthWindow();
     onClose();
+  };
+
+  const handleWalletClick = () => {
+    const wallet = useTonWallet();
+    if (!wallet) {
+      onClose();
+    }
   };
 
   return (
@@ -53,33 +61,11 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
-        <ListItem 
-          sx={{ 
-            color: 'white',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            }
-          }}
-        >
-          <ListItemText 
-            primary={
-              <TelegramConnectButton onClick={handleTelegramClick} header={true} />
-            } 
-          />
+        <ListItem>
+          <TelegramConnectButton onClick={handleTelegramClick} header={true} />
         </ListItem>
-        <ListItem 
-          sx={{ 
-            color: 'white',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            }
-          }}
-        >
-          <ListItemText 
-            primary={
-              <ConnectWalletButton variant="mobileHeader" />
-            } 
-          />
+        <ListItem onClick={handleWalletClick}>
+          <ConnectWalletButton variant="mobileHeader" />
         </ListItem>
       </List>
     </Drawer>

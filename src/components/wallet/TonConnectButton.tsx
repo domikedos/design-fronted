@@ -13,6 +13,9 @@ export const ConnectWalletButton = ({ className, variant = 'header' }: TonConnec
   const address = useTonAddress();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const disconnectWallet = () => {
+    tonConnectUI.disconnect();
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (wallet) {
@@ -83,7 +86,6 @@ export const ConnectWalletButton = ({ className, variant = 'header' }: TonConnec
           gap: '8px',
           letterSpacing: '-0.5px',
           minWidth: '120px',
-          height: 'auto',
           width: {xs: '100%', sm: 'auto'},
           '&:hover': {
               borderRadius: '8px !important',
@@ -100,7 +102,7 @@ export const ConnectWalletButton = ({ className, variant = 'header' }: TonConnec
       </Button> 
     ) : (
       <Button
-            onClick={handleClick}
+            onClick={disconnectWallet}
             sx={{
             borderRadius: '6px !important',
             background: '#121214 !important',
@@ -108,7 +110,7 @@ export const ConnectWalletButton = ({ className, variant = 'header' }: TonConnec
             fontSize: '15px !important',
             fontWeight: 590,
             lineHeight: '18px',
-            padding: '12px 16px !important',
+            padding: '9px 16px !important',
             transition: 'all 0.2s ease-in-out !important',
             display: 'flex',
             alignItems: 'center',

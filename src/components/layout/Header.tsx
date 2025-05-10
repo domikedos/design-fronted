@@ -22,7 +22,10 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
 
   return (
     <AppBar position="static" elevation={0}>
-      <Toolbar sx={{ px: { xs: 2, sm: 4, md: 6 } }}>
+      <Toolbar sx={{ 
+        px: { xs: 2, sm: 4, md: 6 },
+        minHeight: { xs: '72px', sm: '64px' }
+      }}>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <img 

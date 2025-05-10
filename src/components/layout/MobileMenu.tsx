@@ -54,7 +54,6 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
           </ListItem>
         ))}
         <ListItem 
-          onClick={onClose}
           sx={{ 
             color: 'white',
             '&:hover': {
@@ -69,7 +68,6 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
           />
         </ListItem>
         <ListItem 
-          onClick={onClose}
           sx={{ 
             color: 'white',
             '&:hover': {
@@ -79,7 +77,7 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
         >
           <ListItemText 
             primary={
-              <ConnectWalletButton variant="header" />
+              <ConnectWalletButton variant="mobileHeader" />
             } 
           />
         </ListItem>

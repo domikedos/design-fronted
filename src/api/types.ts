@@ -42,6 +42,14 @@ export interface Solution {
   submission: Submission;
 }
 
+export interface TonProofResponse {
+  payload: string;
+}
+
+export interface TonTokenResponse {
+  payload: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

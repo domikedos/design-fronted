@@ -10,12 +10,57 @@ import Ratings from './pages/Ratings';
 import UserProfile from './pages/UserProfile';
 import Submission from './pages/Submission';
 import Problem from './pages/Problem';
+import { useWalletConnection } from './hooks/useWalletConnection';
 
 // Add Telegram auth handler
 declare global {
   interface Window {
     onTelegramAuth: (user: any) => void;
   }
+}
+
+function AppContent() {
+  useWalletConnection();
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <Layout>
+              <Home />
+            </Layout>
+          } />
+          <Route path="/problems" element={
+            <Layout>
+              <Problems />
+            </Layout>
+          } />
+          <Route path="/problems/:id" element={
+            <Layout>
+              <Problem />
+            </Layout>
+          } />
+          <Route path="/ratings" element={
+            <Layout>
+              <Ratings />
+            </Layout>
+          } />
+          <Route path="/users/:id" element={
+            <Layout>
+              <UserProfile />
+            </Layout>
+          } />
+          <Route path="/submissions/:id" element={
+            <Layout>
+              <Submission />
+            </Layout>
+          } />
+        </Routes>
+      </Router>
+    </ThemeProvider>
+  );
 }
 
 function App() {
@@ -27,43 +72,7 @@ function App() {
         borderRadius: 's',
       }}
     >
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <Routes>
-            <Route path="/" element={
-              <Layout>
-                <Home />
-              </Layout>
-            } />
-            <Route path="/problems" element={
-              <Layout>
-                <Problems />
-              </Layout>
-            } />
-            <Route path="/problems/:id" element={
-              <Layout>
-                <Problem />
-              </Layout>
-            } />
-            <Route path="/ratings" element={
-              <Layout>
-                <Ratings />
-              </Layout>
-            } />
-            <Route path="/users/:id" element={
-              <Layout>
-                <UserProfile />
-              </Layout>
-            } />
-            <Route path="/submissions/:id" element={
-              <Layout>
-                <Submission />
-              </Layout>
-            } />
-          </Routes>
-        </Router>
-      </ThemeProvider>
+      <AppContent />
     </TonConnectUIProvider>
   );
 }

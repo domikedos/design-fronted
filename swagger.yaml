@@ -1,0 +1,834 @@
+basePath: /
+definitions:
+  domain.FullSolutionDTO:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      is_liked:
+        type: boolean
+      likes:
+        type: integer
+      submission:
+        $ref: '#/definitions/domain.FullSubmissionDTO'
+      title:
+        type: string
+    type: object
+  domain.FullSubmissionDTO:
+    properties:
+      code:
+        type: string
+      created_at:
+        type: string
+      gas_used:
+        type: integer
+      id:
+        type: integer
+      is_done:
+        type: boolean
+      lang:
+        type: string
+      passed_tests:
+        type: integer
+      task_id:
+        type: integer
+      total_tests:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  domain.Place:
+    properties:
+      place_lower_bound:
+        type: integer
+      place_upper_bound:
+        type: integer
+    type: object
+  domain.PrunedSolutionDTO:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      likes:
+        type: integer
+      title:
+        type: string
+      user:
+        $ref: '#/definitions/domain.PrunedUserDTO'
+    type: object
+  domain.PrunedTaskDTO:
+    properties:
+      difficulty:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  domain.PrunedUserDTO:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      photo_url:
+        type: string
+    type: object
+  domain.RatingUserDTO:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      place:
+        $ref: '#/definitions/domain.Place'
+      solved:
+        type: integer
+    type: object
+  domain.ResultSubmissionDTO:
+    properties:
+      created_at:
+        type: string
+      gas_used:
+        type: integer
+      is_done:
+        type: boolean
+      passed_tests:
+        type: integer
+      total_tests:
+        type: integer
+    type: object
+  domain.UserDTO:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      photo_url:
+        type: string
+      place:
+        $ref: '#/definitions/domain.Place'
+      solved:
+        type: integer
+      username:
+        type: string
+    type: object
+  model.APICreateSolutionRequest:
+    properties:
+      description:
+        type: string
+      submission_id:
+        type: integer
+      title:
+        type: string
+    type: object
+  model.APIGetFullSubmissionInfoResponse:
+    properties:
+      submission:
+        $ref: '#/definitions/domain.FullSubmissionDTO'
+    type: object
+  model.APIGetSubmissionResponse:
+    properties:
+      submission:
+        $ref: '#/definitions/domain.ResultSubmissionDTO'
+    type: object
+  model.APIGetSubmissionsResponse:
+    properties:
+      submissions:
+        items:
+          $ref: '#/definitions/domain.ResultSubmissionDTO'
+        type: array
+    type: object
+  model.APIGetTasksResponse:
+    properties:
+      tasks:
+        items:
+          $ref: '#/definitions/domain.PrunedTaskDTO'
+        type: array
+    type: object
+  model.APIPrunedUserResponse:
+    properties:
+      user:
+        $ref: '#/definitions/domain.RatingUserDTO'
+    type: object
+  model.APIRegisterUserRequest:
+    properties:
+      telegram_token:
+        type: string
+      ton_proof_token:
+        type: string
+    type: object
+  model.APISolutionResponse:
+    properties:
+      solution:
+        $ref: '#/definitions/domain.FullSolutionDTO'
+    type: object
+  model.APISolutionsResponse:
+    properties:
+      solutions:
+        items:
+          $ref: '#/definitions/domain.PrunedSolutionDTO'
+        type: array
+    type: object
+  model.APISubmitSolutionRequest:
+    properties:
+      code:
+        type: string
+      lang:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.APITelegramAuthRequest:
+    properties:
+      auth_date:
+        type: integer
+      first_name:
+        type: string
+      hash:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      photo_url:
+        type: string
+      username:
+        type: string
+    type: object
+  model.APITokenResponse:
+    properties:
+      token:
+        description: token
+        type: string
+    type: object
+  model.APITonProofPayloadResponse:
+    properties:
+      payload:
+        description: Ton proof payload
+        type: string
+    type: object
+  model.APITopUsersResponse:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/domain.RatingUserDTO'
+        type: array
+    type: object
+  model.APIUserResponse:
+    properties:
+      user:
+        $ref: '#/definitions/domain.UserDTO'
+    type: object
+  model.BasicAPIError:
+    properties:
+      details:
+        description: Additional error details (for debugging)
+        type: string
+      message:
+        description: Basic error message
+        type: string
+    type: object
+  model.BasicAPIResponse:
+    properties:
+      success:
+        description: Success status
+        type: boolean
+    type: object
+  model.Domain:
+    properties:
+      lengthBytes:
+        type: integer
+      value:
+        type: string
+    type: object
+  model.Proof:
+    properties:
+      domain:
+        $ref: '#/definitions/model.Domain'
+      payload:
+        type: string
+      signature:
+        type: string
+      stateInit:
+        type: string
+      timestamp:
+        type: integer
+    type: object
+  model.TonProofRequest:
+    properties:
+      address:
+        type: string
+      network:
+        type: string
+      proof:
+        $ref: '#/definitions/model.Proof'
+      publicKey:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Split API
+  title: Split API
+  version: "1"
+paths:
+  /api/solutions:
+    post:
+      consumes:
+      - application/json
+      description: Creates solution
+      parameters:
+      - description: solution data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.APICreateSolutionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BasicAPIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Creates solution
+      tags:
+      - solution
+  /api/solutions/{id}:
+    get:
+      description: Returns solution by its id
+      parameters:
+      - description: Solution id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APISolutionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Returns solution by its id
+      tags:
+      - solution
+  /api/solutions/{id}/like:
+    delete:
+      description: Unlike solution
+      parameters:
+      - description: Solution id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BasicAPIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Unlike solution
+      tags:
+      - solution
+    post:
+      description: Like solution
+      parameters:
+      - description: Solution id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BasicAPIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Like solution
+      tags:
+      - solution
+  /api/solutions/tasks/{id}:
+    get:
+      description: Get list of solutions sort by some field with pagination
+      parameters:
+      - description: Solution id
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: offset
+        type: integer
+      - in: query
+        name: orderBy
+        type: string
+      - in: query
+        name: sortBy
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APISolutionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Get list of solutions
+      tags:
+      - solution
+  /api/submissions/{id}:
+    get:
+      description: Returns full submission info
+      parameters:
+      - description: Submission id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIGetFullSubmissionInfoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Returns full submission info
+      tags:
+      - submission
+  /api/submissions/{id}/result:
+    get:
+      description: Check solution status
+      parameters:
+      - description: Submission id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIGetSubmissionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Check solution status
+      tags:
+      - submission
+  /api/submissions/users/{userID}/tasks/{taskID}:
+    get:
+      description: Returns user's submission for task
+      parameters:
+      - description: user id
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: task id
+        in: path
+        name: taskID
+        required: true
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: offset
+        type: integer
+      - in: query
+        name: orderBy
+        type: string
+      - in: query
+        name: sortBy
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIGetSubmissionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Returns user's submission for task
+      tags:
+      - submission
+  /api/tasks:
+    get:
+      description: Get list of tasks sort by some field with pagination
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: offset
+        type: integer
+      - in: query
+        name: orderBy
+        type: string
+      - in: query
+        name: sortBy
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIGetTasksResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Get list of tasks
+      tags:
+      - tasks
+  /api/tasks/{id}:
+    get:
+      description: Get certain task by id
+      parameters:
+      - description: Task id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIGetTasksResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Get task
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Submit user's solution
+      parameters:
+      - description: Task id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Check proof
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.APISubmitSolutionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BasicAPIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Submit user's solution
+      tags:
+      - tasks
+  /api/telegram/auth:
+    post:
+      consumes:
+      - application/json
+      description: API to check telegram auth
+      parameters:
+      - description: telegram auth data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.APITelegramAuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APITokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: API to check telegram auth
+      tags:
+      - telegram
+  /api/ton-proof/check-proof:
+    post:
+      consumes:
+      - application/json
+      description: API ton-proof to check proof, returns jwt token if proof checked
+        successfully, otherwise error
+      parameters:
+      - description: Check proof
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.TonProofRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APITokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: API ton-proof to check proof
+      tags:
+      - ton-proof
+  /api/ton-proof/generate-payload:
+    post:
+      description: API ton-proof to generate payload, returns payload, like payload=fe66ab...
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APITonProofPayloadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: API ton-proof to generate payload
+      tags:
+      - ton-proof
+  /api/users:
+    get:
+      description: Get top users
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APITopUsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Get top users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: API to register new user
+      parameters:
+      - description: user data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.APIRegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APITokenResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: User registration
+      tags:
+      - users
+  /api/users/{id}:
+    get:
+      description: Get user
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Get user
+      tags:
+      - users
+  /api/users/{id}/rating:
+    get:
+      description: Get user's range of places in the top list
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIPrunedUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.BasicAPIError'
+      summary: Get user's range of places in the top list
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    description: Authorization header JWT with "Bearer " prefix
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -12,6 +12,7 @@ interface MobileMenuProps {
 
 export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
   const { openTelegramAuthWindow } = useTelegramAuth();
+  const wallet = useTonWallet();
 
   const navigationItems = [
     { text: 'Problems', path: '/problems' },
@@ -25,7 +26,6 @@ export const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
   };
 
   const handleWalletClick = () => {
-    const wallet = useTonWallet();
     if (!wallet) {
       onClose();
     }

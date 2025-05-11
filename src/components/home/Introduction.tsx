@@ -1,7 +1,22 @@
 import { Box, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useTokenStore } from '../../store/authToken';
 
 export const Introduction = () => {
+  const navigate = useNavigate();
+  const { accessToken } = useTokenStore();
+
+  const handleSolveNowClick = () => {
+    if (!accessToken) {
+      const registerSection = document.getElementById('register-section');
+      if (registerSection) {
+        registerSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/problems');
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -21,8 +36,7 @@ export const Introduction = () => {
           Level up your smart contract's development skills, enhance your critical thinking, and tackle real-world challenges.
         </Typography>
         <Button
-          component={Link}
-          to="/problems"
+          onClick={handleSolveNowClick}
           variant="contained"
           sx={{
             background: ' #2D83EC',

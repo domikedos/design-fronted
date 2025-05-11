@@ -8,6 +8,7 @@ export const Register = () => {
 
   return (
     <Box
+      id="register-section"
       sx={{
         display: 'flex',
         flexDirection: 'column',

@@ -1,6 +1,8 @@
-import { Box, Container, Typography, Paper, Grid, Chip, TextField, InputAdornment } from '@mui/material';
+import { Box, Container, Typography, Paper, Grid, Chip, TextField, InputAdornment, Select, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import { useProblemSearch } from '../hooks/useProblemSearch';
+import { Task } from '../api/types';
 
 interface Problem {
   id: number;
@@ -55,6 +57,14 @@ const getDifficultyColor = (difficulty: string) => {
 };
 
 export default function Problems() {
+  const { 
+    searchQuery, 
+    difficultyFilter, 
+    handleSearch, 
+    handleDifficultyFilter, 
+    filteredProblems 
+  } = useProblemSearch({ problems });
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4, px: { xs: 2, sm: 4, md: 6 } }}>
       <Box sx={{ 
@@ -69,12 +79,59 @@ export default function Problems() {
         <Typography variant="h4" component="h1" sx={{ fontWeight: 600, width: { xs: '100%', sm: 'auto' } }}>
           Problems
         </Typography>
-        <Box sx={{ width: { xs: '100%', sm: 'auto' } }}>
+        <Box sx={{ 
+          display: 'flex', 
+          gap: 2,
+          width: { xs: '100%', sm: 'auto' },
+          flexDirection: { xs: 'column', sm: 'row' }
+        }}>
+          <Select
+            value={difficultyFilter}
+            onChange={(e) => handleDifficultyFilter(e.target.value)}
+            displayEmpty
+            size="small"
+            disableUnderline
+            sx={{
+              width: { xs: '100%', sm: '150px' },
+              transition: 'all 0.2s ease-in-out',
+              boxShadow: 'none !important',
+              '& .MuiSelect-select': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: 'none',
+              },
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                transition: 'all 0.2s ease-in-out',
+              },
+              '&:click': {
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                transition: 'all 0.2s ease-in-out',
+              },
+              '&:focus': {
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                transition: 'all 0.2s ease-in-out',
+              }
+            }}
+          >
+            <MenuItem value="">All Difficulties</MenuItem>
+            <MenuItem value="Easy">Easy</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="Hard">Hard</MenuItem>
+          </Select>
           <TextField
             size="small"
             placeholder="Search problems..."
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
             sx={{
               width: { xs: '100%', sm: '300px' },
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                transition: 'all 0.2s ease-in-out',
+              },
               '& .MuiOutlinedInput-root': {
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 '& fieldset': {
@@ -99,7 +156,7 @@ export default function Problems() {
         </Box>
       </Box>
       <Grid container spacing={0}>
-        {problems.map((problem) => (
+        {filteredProblems.map((problem) => (
           <Grid item xs={12} key={problem.id}>
             <Link to={`/problems/${problem.id}`} style={{ textDecoration: 'none' }}>
               <Paper

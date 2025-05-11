@@ -3,7 +3,7 @@ export const useTelegramAuth = () => {
   const origin = window.location.origin;
 
   const openTelegramAuthWindow = () => {
-    const url = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=0&request_access=write&return_to=some-url`;
+    const url = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=0&request_access=write&return_to=http://localhost:8080/api/telegram/auth`;
     const width = 550;
     const height = 450;
     const left = window.screenX + (window.outerWidth - width) / 2;

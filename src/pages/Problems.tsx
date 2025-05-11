@@ -2,7 +2,6 @@ import { Box, Container, Typography, Paper, Grid, Chip, TextField, InputAdornmen
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { useProblemSearch } from '../hooks/useProblemSearch';
-import { Task } from '../api/types';
 
 interface Problem {
   id: number;
